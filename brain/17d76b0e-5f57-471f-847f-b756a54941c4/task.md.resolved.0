@@ -1,0 +1,5 @@
+- [ ] Add the range slider to HTML
+- [ ] Add CSS for the slider
+- [ ] Add `defaultYears` array to JS
+- [ ] Update JS `showDefaultFleetwoodMac` and `displaySongs` to handle sorting
+- [ ] Add event listener for the slider to sort the displayed songs

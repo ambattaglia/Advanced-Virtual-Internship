@@ -1,0 +1,6 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary":  "Implementation plan to finish the Ultraverse NFT Marketplace website. Details API integrations (hot collections, new items, top sellers, explore, item details, author profiles), routing updates, countdown timers, search/sort filters, slider installations, and loading skeletons.",
+  "updatedAt":  "2026-07-30T19:52:00.993705900Z",
+  "requestFeedback":  true
+}

@@ -1,0 +1,6 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary":  "Implementation plan for adding a year-based sorting/filtering mechanism with a custom 'fake scroll bar' UI element.",
+  "updatedAt":  "2026-05-05T20:04:16.892996Z",
+  "requestFeedback":  true
+}

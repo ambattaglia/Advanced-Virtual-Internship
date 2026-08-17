@@ -1,0 +1,26 @@
+# Tasks - Summarist v2
+
+- [x] Project Initialization
+  - [x] Initialize Next.js project with Tailwind CSS, App Router, TypeScript, ESLint in `./`
+  - [x] Install required packages (`@reduxjs/toolkit`, `react-redux`, `react-icons`, `canvas-confetti`)
+- [x] Asset Recovery
+  - [x] Download logos and landing illustrations from original repository assets
+  - [x] Put them in public directory
+- [x] Redux & Mock Layer Setup
+  - [x] Create mock database endpoints & utility functions (Auth state, Library storage, Stripe state)
+  - [x] Configure Redux Store and slices (auth, player, library)
+- [x] Core Layout and Navigation
+  - [x] Build global Layout with Sidebar and Top Search Bar (excluding home and sales pages)
+  - [x] Implement debounced search utility (300ms) with API endpoint calls
+  - [x] Implement global Auth Modal (Login, Register, Guest Login) linked to Redux Auth state
+- [x] Page Implementation
+  - [x] Home Page (`/`) - Landing page with layout matched to original repo but with Tailwind styling
+  - [x] Dashboard Page (`/for-you`) - Selected Book banner, Recommended / Suggested carousels with skeleton loadings
+  - [x] Inside Book Page (`/book/[id]`) - Dynamic route showing book descriptions and logic to handle premium redirects
+  - [x] Audio Player Page (`/player/[id]`) - Summary description, progress bar slider, speeds, rewinds, and end-of-audio handler
+  - [x] Sales Page (`/choose-plan`) - Yearly/Monthly tier selections, FAQ accordion
+  - [x] Settings Page (`/settings`) - Profile details, billing details, mock payment upgrade triggers
+  - [x] Library Page (`/library`) - Saved book cards list, finished book cards list
+- [x] Verification and Polish
+  - [x] Verify production compilation (`npm run build`)
+  - [x] Verify responsiveness on Mobile and Desktop
