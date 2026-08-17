@@ -1,5 +1,0 @@
-- `[x] Fix imports in `src/components/Book.jsx`
-- `[x] Create the recommended books component `src/components/ui/BestBooks.jsx`
-- `[x] Fix imports and component names in `src/pages/BookInfo.jsx`
-- `[x] Update `src/App.js` to pass `books` and `addItemToCart` props, and add cart state
-- `[x] Verify by building the application (`npm run build`)

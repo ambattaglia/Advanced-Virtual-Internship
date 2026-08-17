@@ -1,6 +1,0 @@
-{
-  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
-  "summary":  "Plan to fix missing exports, restore build functionality, connect YouTube API data (channel, comments, recommended videos), and enhance search in the YouTube Clone app.",
-  "updatedAt":  "2026-07-20T20:58:51.061186400Z",
-  "requestFeedback":  true
-}

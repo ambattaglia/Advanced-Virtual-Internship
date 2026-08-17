@@ -1,6 +1,0 @@
-{
-  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
-  "summary":  "Detailed implementation plan to copy the reference React library e-commerce application, fixing compilation errors, moving components into ui/ subdirectory, and creating cart state and page.",
-  "updatedAt":  "2026-07-14T14:11:04.353673Z",
-  "requestFeedback":  true
-}

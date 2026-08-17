@@ -1,6 +1,0 @@
-- [x] Export `value_converter` from `src/data.js`
-- [x] Connect dynamic channel data & comments fetching in `PlayVideo.jsx`
-- [x] Pass `categoryId` to `Recommended` component in `Video.jsx`
-- [x] Implement live video recommendations API call in `Recommended.jsx`
-- [x] Update `Navbar.jsx` with search input handling
-- [x] Verify build with `npm run build`
