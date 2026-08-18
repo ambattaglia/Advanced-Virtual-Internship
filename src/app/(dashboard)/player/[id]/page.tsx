@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { openAuthModal } from "@/redux/authSlice";
 import { markBookFinished, fetchLibrary } from "@/redux/librarySlice";
 import { setBook } from "@/redux/playerSlice";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
@@ -19,11 +17,6 @@ import {
   AiOutlineLoading3Quarters,
 } from "react-icons/ai";
 
-import {
-  BiVolumeFull,
-  BiVolumeMute,
-} from "react-icons/bi";
-
 export default function AudioPlayerPage() {
   const { id } = useParams() as { id: string };
   const router = useRouter();
@@ -32,7 +25,6 @@ export default function AudioPlayerPage() {
   const { user } = useAppSelector((state) => state.auth);
   const [bookDetails, setBookDetails] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
-  const [speedDropdownOpen, setSpeedDropdownOpen] = useState(false);
 
   // Fetch book details
   useEffect(() => {
@@ -106,160 +98,82 @@ export default function AudioPlayerPage() {
 
   if (loading) {
     return (
-      <div className="w-full flex flex-col justify-center items-center py-20 text-gray-500 gap-4">
-        <AiOutlineLoading3Quarters size={40} className="animate-spin text-[#3ac27c]" />
-        <span className="font-semibold text-sm">Loading audio player...</span>
+      <div className="audio__book--spinner">
+        <AiOutlineLoading3Quarters size={64} className="animate-spin text-[#032b41]" />
       </div>
     );
   }
 
   if (!bookDetails) {
     return (
-      <div className="w-full text-center py-20 text-gray-500">
+      <div className="container" style={{ padding: "40px", textAlign: "center", color: "#6b757b" }}>
         Audio content could not be loaded.
       </div>
     );
   }
 
-  const speedOptions = [0.75, 1.0, 1.25, 1.5, 2.0];
-
   return (
-    <div className="w-full flex flex-col gap-8">
-      {/* Upper Section: Book description / metadata */}
-      <div className="flex flex-col md:flex-row gap-6 border-b border-gray-100 pb-8 items-center md:items-start text-center md:text-left">
-        <div className="relative w-[100px] h-[150px] shadow-lg rounded-xl overflow-hidden shrink-0 bg-gray-50 border border-gray-100">
-          <Image
-            src={bookDetails.imageLink}
-            alt={bookDetails.title}
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div className="flex flex-col justify-center gap-2">
-          <h1 className="text-xl md:text-2xl font-black text-[#032b41] leading-tight">
-            {bookDetails.title}
-          </h1>
-          <p className="text-sm font-semibold text-[#3ac27c]">{bookDetails.author}</p>
-          <p className="text-xs text-gray-400 font-light max-w-[500px]">
-            {bookDetails.subTitle}
-          </p>
+    <div>
+      {/* Scrollable Summary Text Area */}
+      <div className="summary">
+        <div className="audio__book--summary">
+          <div className="audio__book--summary-title">
+            <b>{bookDetails.title}</b>
+          </div>
+          <div className="audio__book--summary-text">
+            {bookDetails.summary}
+          </div>
         </div>
       </div>
 
-      {/* Main Interactive Audio Player UI */}
-      <div className="bg-[#032b41] text-white rounded-2xl p-6 md:p-8 flex flex-col items-center gap-6 shadow-xl relative overflow-hidden select-none">
-        {/* Subtle decorative background glow */}
-        <div className="absolute -top-12 -left-12 w-36 h-36 rounded-full bg-[#3ac27c]/10 blur-xl"></div>
-        <div className="absolute -bottom-12 -right-12 w-36 h-36 rounded-full bg-[#0365f2]/10 blur-xl"></div>
+      {/* Fixed Audio Player Footer */}
+      <div className="audio__wrapper">
+        {/* Track Details */}
+        <div className="audio__track--wrapper">
+          <figure className="audio__track--image-mask">
+            <img src={bookDetails.imageLink} alt={bookDetails.title} className="audio__track--image" />
+          </figure>
+          <div className="audio__track--details-wrapper">
+            <div className="audio__track--title" style={{ fontWeight: "600", fontSize: "14px" }}>
+              {bookDetails.title}
+            </div>
+            <div className="audio__track--author" style={{ fontSize: "12px" }}>
+              {bookDetails.author}
+            </div>
+          </div>
+        </div>
 
-        {/* Controls Row */}
-        <div className="flex items-center gap-8 z-10">
-          {/* Skip Backward Button */}
-          <button
-            onClick={skipBackward}
-            className="text-gray-400 hover:text-white transition-colors"
-            title="Rewind 15 seconds"
-          >
+        {/* Audio Controls */}
+        <div className="audio__controls">
+          <button className="audio__controls--btn" onClick={skipBackward} title="Rewind 15s">
             <AiOutlineUndo size={28} />
           </button>
-
-          {/* Main Play/Pause Button */}
-          <button
-            onClick={togglePlay}
-            className="text-[#2bd97c] hover:scale-105 transition-transform"
-            title={isPlaying ? "Pause" : "Play"}
-          >
+          
+          <button className="audio__controls--btn audio__controls--btn-play" onClick={togglePlay} title={isPlaying ? "Pause" : "Play"}>
             {isPlaying ? (
-              <AiOutlinePauseCircle size={68} />
+              <AiOutlinePauseCircle size={32} style={{ color: "#042330" }} />
             ) : (
-              <AiOutlinePlayCircle size={68} />
+              <AiOutlinePlayCircle size={32} className="audio__controls--play-icon" style={{ color: "#042330" }} />
             )}
           </button>
 
-          {/* Skip Forward Button */}
-          <button
-            onClick={skipForward}
-            className="text-gray-400 hover:text-white transition-colors"
-            title="Fast-forward 15 seconds"
-          >
+          <button className="audio__controls--btn" onClick={skipForward} title="Forward 15s">
             <AiOutlineRedo size={28} />
           </button>
         </div>
 
-        {/* Timeline Slider Progress Row */}
-        <div className="w-full flex items-center gap-4 z-10 text-xs font-semibold text-gray-300">
-          <span>{formatTime(currentTime)}</span>
+        {/* Progress Bar & Time */}
+        <div className="audio__progress--wrapper">
+          <div className="audio__time">{formatTime(currentTime)}</div>
           <input
             type="range"
             min={0}
             max={duration || 100}
             value={currentTime}
             onChange={(e) => seek(parseFloat(e.target.value))}
-            className="flex-1 h-1.5 rounded-lg appearance-none cursor-pointer outline-none bg-gray-600 accent-[#2bd97c]"
+            className="audio__progress--bar"
           />
-          <span>{formatTime(duration)}</span>
-        </div>
-
-        {/* Bottom Volume/Speed Controls Row */}
-        <div className="w-full flex items-center justify-between border-t border-white/10 pt-4 z-10 text-sm">
-          {/* Speed Selection */}
-          <div className="relative">
-            <button
-              onClick={() => setSpeedDropdownOpen(!speedDropdownOpen)}
-              className="text-gray-300 hover:text-white font-bold py-1.5 px-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors"
-            >
-              Speed: {playbackRate}x
-            </button>
-            {speedDropdownOpen && (
-              <div className="absolute bottom-full mb-2 left-0 bg-[#04334d] border border-white/10 rounded-lg shadow-xl overflow-hidden flex flex-col divide-y divide-white/5">
-                {speedOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => {
-                      changeSpeed(opt);
-                      setSpeedDropdownOpen(false);
-                    }}
-                    className={`py-2 px-5 text-xs text-left hover:bg-white/10 transition-colors ${
-                      playbackRate === opt ? "text-[#2bd97c] font-bold" : "text-white"
-                    }`}
-                  >
-                    {opt.toFixed(2)}x
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Volume Control */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleMute}
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              {isMuted || volume === 0 ? (
-                <BiVolumeMute size={20} className="text-red-400" />
-              ) : (
-                <BiVolumeFull size={20} />
-              )}
-            </button>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.1}
-              value={isMuted ? 0 : volume}
-              onChange={(e) => changeVolume(parseFloat(e.target.value))}
-              className="w-20 h-1 rounded-lg appearance-none cursor-pointer outline-none bg-gray-600 accent-white"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Summary Text Paragraphs */}
-      <div className="flex flex-col gap-4 border-t border-gray-150 pt-8 mt-4">
-        <h2 className="text-xl font-bold text-[#032b41]">Summary</h2>
-        <div className="whitespace-pre-line text-sm text-gray-600 font-light leading-relaxed">
-          {bookDetails.summary}
+          <div className="audio__time">{formatTime(duration)}</div>
         </div>
       </div>
     </div>

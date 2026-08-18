@@ -99,34 +99,19 @@ export default function BookDetails() {
     const hasPremiumAccess = subStatus !== "basic";
 
     if (book.subscriptionRequired && !hasPremiumAccess && !user.isGuest) {
-      // Premium book, user is not subscribed and is not a guest -> sales page
       router.push("/choose-plan");
     } else {
-      // Free book, user is subscribed, or user is guest -> player page
       router.push(`/player/${book.id}`);
     }
   };
 
   if (loading) {
     return (
-      <div className="w-full flex flex-col gap-10 animate-pulse">
-        <div className="flex flex-col lg:flex-row gap-10">
-          <div className="w-[180px] h-[270px] bg-gray-200 rounded-xl shrink-0 mx-auto lg:mx-0"></div>
-          <div className="flex-1 flex flex-col justify-center gap-4">
-            <div className="h-8 bg-gray-200 rounded w-2/3"></div>
-            <div className="h-5 bg-gray-200 rounded w-1/4"></div>
-            <div className="h-5 bg-gray-200 rounded w-1/3"></div>
-            <div className="flex gap-4 mt-4">
-              <div className="h-12 bg-gray-200 rounded-lg w-28"></div>
-              <div className="h-12 bg-gray-200 rounded-lg w-28"></div>
-            </div>
+      <div className="container">
+        <div className="row">
+          <div className="inner__wrapper">
+            <div className="inner__book--skeleton skeleton" style={{ width: "100%", height: "400px", borderRadius: "8px" }}></div>
           </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <div className="h-6 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
         </div>
       </div>
     );
@@ -134,135 +119,108 @@ export default function BookDetails() {
 
   if (!book) {
     return (
-      <div className="w-full text-center py-20 text-gray-500">
-        Book details could not be found.
+      <div className="container">
+        <div className="row">
+          <div className="section__title" style={{ textAlign: "center", color: "#6b757b" }}>
+            Book details could not be found.
+          </div>
+        </div>
       </div>
     );
   }
 
-  // Mock metadata if not present
   const rating = book.averageRating || 4.5;
   const ratingCount = book.totalRating || 120;
-  const duration = "15 min"; // Mock duration
+  const duration = "15 min";
   const keyIdeas = book.keyIdeas || "10 key ideas";
   const type = book.type || "Audio & Text";
 
   return (
-    <div className="w-full flex flex-col gap-10">
-      {/* Top Section: Cover & CTA */}
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-stretch">
-        {/* Image */}
-        <div className="relative w-[180px] h-[270px] lg:w-[220px] lg:h-[330px] shadow-2xl rounded-2xl overflow-hidden shrink-0 bg-gray-50 border border-gray-100">
-          <Image
-            src={book.imageLink}
-            alt={book.title}
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
+    <div className="container">
+      <div className="row">
+        <div className="inner__wrapper">
+          <div className="inner__book">
+            <div className="inner-book__title">{book.title}</div>
+            <div className="inner-book__author" style={{ fontWeight: "700" }}>By {book.author}</div>
+            <div className="inner-book__sub--title">{book.subTitle}</div>
 
-        {/* Text Details & Buttons */}
-        <div className="flex-1 flex flex-col justify-center text-center lg:text-left">
-          <h1 className="text-2xl lg:text-4xl font-black text-[#032b41] mb-2 leading-tight">
-            {book.title}
-          </h1>
-          <p className="text-base font-bold text-gray-700 mb-2">By {book.author}</p>
-          <p className="text-sm font-light text-gray-500 mb-6 max-w-[600px] leading-relaxed">
-            {book.subTitle}
-          </p>
-
-          {/* Key details tags */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8 text-xs font-semibold text-gray-600 border-y border-gray-150 py-4">
-            <div className="flex items-center gap-1.5">
-              <AiOutlineStar className="text-amber-500" size={16} />
-              <span>{rating.toFixed(1)}</span>
-              <span className="text-gray-400">({ratingCount} ratings)</span>
+            {/* Book Metrics Grid */}
+            <div className="inner-book__wrapper">
+              <div className="inner-book__description--wrapper">
+                <div className="inner-book__description">
+                  <div className="inner-book__icon">
+                    <AiOutlineStar style={{ color: "#3ac27c" }} />
+                  </div>
+                  <span>{rating.toFixed(1)} ({ratingCount} ratings)</span>
+                </div>
+                <div className="inner-book__description">
+                  <div className="inner-book__icon">
+                    <AiOutlineClockCircle />
+                  </div>
+                  <span>{duration}</span>
+                </div>
+                <div className="inner-book__description">
+                  <div className="inner-book__icon">
+                    <AiOutlineAudio />
+                  </div>
+                  <span>{type}</span>
+                </div>
+                <div className="inner-book__description">
+                  <div className="inner-book__icon">
+                    <AiOutlineBook />
+                  </div>
+                  <span>{keyIdeas}</span>
+                </div>
+              </div>
             </div>
-            <span className="text-gray-250">|</span>
-            <div className="flex items-center gap-1.5">
-              <AiOutlineClockCircle size={16} className="text-gray-500" />
-              <span>{duration}</span>
+
+            {/* Read/Listen CTAs */}
+            <div className="inner-book__read--btn-wrapper">
+              <button className="inner-book__read--btn" onClick={handleReadOrListen}>
+                <div className="inner-book__read--icon">
+                  <AiOutlineFileText />
+                </div>
+                <span>Read</span>
+              </button>
+              <button className="inner-book__read--btn" onClick={handleReadOrListen}>
+                <div className="inner-book__read--icon">
+                  <BiVolumeFull />
+                </div>
+                <span>Listen</span>
+              </button>
             </div>
-            <span className="text-gray-250">|</span>
-            <div className="flex items-center gap-1.5">
-              <AiOutlineAudio size={16} className="text-gray-500" />
-              <span>{type}</span>
+
+            {/* Library Bookmark Action */}
+            <div className="inner-book__bookmark" onClick={handleLibraryAction} style={{ userSelect: "none" }}>
+              <div className="inner-book__bookmark--icon">
+                {isSaved ? <BsBookmarkDash style={{ color: "#f56c6c" }} /> : <BsBookmarkPlusFill style={{ color: "#3ac27c" }} />}
+              </div>
+              <span>{isSaved ? "Saved to Library" : "Save to Library"}</span>
             </div>
-          </div>
 
-          {/* Action CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-            <button
-              onClick={handleReadOrListen}
-              className="flex items-center justify-center gap-3 bg-[#032b41] hover:bg-[#04334d] text-white font-bold py-3.5 px-8 rounded-xl text-sm transition-all duration-200 select-none shadow-md shadow-[#032b41]/10"
-            >
-              <AiOutlineFileText size={18} />
-              <span>Read</span>
-            </button>
-
-            <button
-              onClick={handleReadOrListen}
-              className="flex items-center justify-center gap-3 bg-[#032b41] hover:bg-[#04334d] text-white font-bold py-3.5 px-8 rounded-xl text-sm transition-all duration-200 select-none shadow-md shadow-[#032b41]/10"
-            >
-              <BiVolumeFull size={18} />
-              <span>Listen</span>
-            </button>
-
-            {/* Library toggle Button */}
-            <button
-              onClick={handleLibraryAction}
-              disabled={libraryLoading}
-              className={`flex items-center justify-center gap-2.5 font-bold py-3.5 px-6 rounded-xl text-sm transition-all duration-200 select-none border ${
-                isSaved
-                  ? "border-red-200 bg-red-50 text-red-600 hover:bg-red-100/50 hover:border-red-300"
-                  : "border-gray-200 hover:bg-gray-50 text-[#032b41]"
-              }`}
-            >
-              {isSaved ? (
-                <>
-                  <BsBookmarkDash size={16} />
-                  <span>Remove from Library</span>
-                </>
-              ) : (
-                <>
-                  <BsBookmarkPlusFill size={16} className="text-[#3ac27c]" />
-                  <span>Save to Library</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Section: Summary & Author */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-6 border-t border-gray-100 pt-10">
-        {/* About Book */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
-          <div>
-            <h3 className="text-xl font-bold text-[#032b41] mb-3">What&apos;s inside?</h3>
-            <p className="text-sm font-semibold text-gray-500 mb-4">{keyIdeas}</p>
-            <div className="h-1.5 w-16 bg-[#2bd97c] rounded-full"></div>
-          </div>
-          <div className="flex flex-col gap-4 text-sm text-gray-600 font-light leading-relaxed">
-            <h4 className="font-bold text-base text-[#032b41]">Book Description</h4>
-            <p className="whitespace-pre-line">
+            {/* Tags and Description */}
+            <div className="inner-book__secondary--title">What&apos;s inside?</div>
+            <div className="inner-book__tags--wrapper">
+              <div className="inner-book__tag">{keyIdeas}</div>
+              <div className="inner-book__tag">{duration} summary</div>
+            </div>
+            <div className="inner-book__book--description">
               {book.bookDescription ||
                 "This book provides actionable insights and powerful principles to transform your perspective. Discover the core values, key decisions, and habits that separate high-performers from the rest of the world."}
-            </p>
-          </div>
-        </div>
+            </div>
 
-        {/* About Author */}
-        <div className="bg-[#f7faf9] rounded-2xl p-6 border border-gray-100 flex flex-col gap-4">
-          <h3 className="text-lg font-bold text-[#032b41]">About the Author</h3>
-          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">
-            Featured writer
-          </p>
-          <p className="text-sm text-gray-600 font-light leading-relaxed whitespace-pre-line">
-            {book.authorDescription ||
-              `${book.author} is a highly acclaimed author and subject matter expert. Their work focus on personal development, strategic decision-making, and structural transformation.`}
-          </p>
+            {/* Author Section */}
+            <div className="inner-book__author--title">About the Author</div>
+            <div className="inner-book__author--description">
+              {book.authorDescription ||
+                `${book.author} is a highly acclaimed author and subject matter expert. Their work focuses on personal development, strategic decision-making, and structural transformation.`}
+            </div>
+          </div>
+
+          {/* Book Cover mask */}
+          <div className="inner-book--img-wrapper">
+            <img src={book.imageLink} alt={book.title} className="inner-book__img" style={{ maxWidth: "220px", borderRadius: "8px" }} />
+          </div>
         </div>
       </div>
     </div>

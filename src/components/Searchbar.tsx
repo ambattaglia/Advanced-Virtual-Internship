@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AiOutlineSearch, AiOutlineLoading3Quarters } from "react-icons/ai";
+import { RxHamburgerMenu } from "react-icons/rx";
 import { Book } from "@/redux/playerSlice";
 
 export default function Searchbar() {
@@ -63,73 +64,75 @@ export default function Searchbar() {
   };
 
   return (
-    <div 
-      ref={containerRef} 
-      className="relative w-full max-w-[640px] z-30"
-    >
-      {/* Search Input Field */}
-      <div className="relative flex items-center w-full bg-white border-2 border-gray-200 rounded-xl overflow-hidden focus-within:border-[#3ac27c] transition-all duration-200">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setIsOpen(true);
-          }}
-          onFocus={() => setIsOpen(true)}
-          placeholder="Search by title or author..."
-          className="w-full py-3.5 pl-5 pr-12 text-sm text-[#032b41] placeholder-gray-400 outline-none"
-        />
-        <div className="absolute right-4 text-gray-400 pointer-events-none">
-          {loading ? (
-            <AiOutlineLoading3Quarters size={20} className="animate-spin text-[#3ac27c]" />
-          ) : (
-            <AiOutlineSearch size={22} />
-          )}
-        </div>
-      </div>
-
-      {/* Search Results Dropdown */}
-      {isOpen && query.trim() && (
-        <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-xl max-h-[360px] overflow-y-auto animate-fade-in divide-y divide-gray-100">
-          {loading ? (
-            <div className="p-6 flex flex-col justify-center items-center text-gray-500 gap-2 text-sm">
-              <AiOutlineLoading3Quarters size={24} className="animate-spin text-[#3ac27c]" />
-              <span>Searching books...</span>
-            </div>
-          ) : results.length > 0 ? (
-            results.map((book) => (
-              <div
-                key={book.id}
-                onClick={() => handleResultClick(book.id)}
-                className="flex gap-4 p-4 hover:bg-gray-50 cursor-pointer transition-colors"
-              >
-                <div className="relative w-12 h-16 shrink-0 bg-gray-100 rounded overflow-hidden">
-                  <Image
-                    src={book.imageLink}
-                    alt={book.title}
-                    fill
-                    sizes="48px"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex flex-col justify-center min-w-0">
-                  <span className="font-bold text-sm text-[#032b41] truncate hover:text-[#3ac27c] transition-colors">
-                    {book.title}
-                  </span>
-                  <span className="text-xs text-gray-500 truncate mt-0.5">
-                    {book.author}
-                  </span>
-                </div>
+    <div className="search__background" ref={containerRef}>
+      <div className="search__wrapper">
+        {/* Search Content wrapper */}
+        <div className="search__content">
+          <div className="search">
+            <div className="search__input--wrapper">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setIsOpen(true);
+                }}
+                onFocus={() => setIsOpen(true)}
+                placeholder="Search for books"
+                className="search__input"
+              />
+              <div className="search__icon">
+                {loading ? (
+                  <AiOutlineLoading3Quarters className="animate-spin text-[#3ac27c]" />
+                ) : (
+                  <AiOutlineSearch />
+                )}
               </div>
-            ))
-          ) : (
-            <div className="p-6 text-center text-gray-500 text-sm">
-              No books found for &quot;<span className="font-semibold">{query}</span>&quot;
             </div>
-          )}
+          </div>
+          
+          {/* Sidebar toggle button (mobile only) */}
+          <div className="sidebar__toggle--btn">
+            <RxHamburgerMenu />
+          </div>
         </div>
-      )}
+
+        {/* Search Results Dropdown */}
+        {isOpen && query.trim() && (
+          <div className="search__books--wrapper">
+            {loading ? (
+              <div style={{ padding: "16px", textAlign: "center", color: "#6b757b" }}>
+                Searching books...
+              </div>
+            ) : results.length > 0 ? (
+              results.map((book) => (
+                <div
+                  key={book.id}
+                  onClick={() => handleResultClick(book.id)}
+                  className="search__book--link"
+                  style={{ cursor: "pointer" }}
+                >
+                  <figure className="search__book--img-mask">
+                    <img
+                      src={book.imageLink}
+                      alt={book.title}
+                      className="search__book--img"
+                    />
+                  </figure>
+                  <div>
+                    <div className="search__book--title">{book.title}</div>
+                    <div className="search__book--author">{book.author}</div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div style={{ padding: "16px", textAlign: "center", color: "#6b757b" }}>
+                No books found for "{query}"
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

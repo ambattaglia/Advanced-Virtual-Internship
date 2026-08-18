@@ -46,7 +46,6 @@ export default function ForYou() {
       } catch (err) {
         console.error("Error fetching recommended books:", err);
       } finally {
-        setRecommendedBooks((prev) => (prev.length > 0 ? prev : []));
         setLoadingRecommended(false);
       }
     };
@@ -61,7 +60,6 @@ export default function ForYou() {
       } catch (err) {
         console.error("Error fetching suggested books:", err);
       } finally {
-        setSuggestedBooks((prev) => (prev.length > 0 ? prev : []));
         setLoadingSuggested(false);
       }
     };
@@ -72,112 +70,109 @@ export default function ForYou() {
   }, []);
 
   return (
-    <div className="w-full flex flex-col gap-10">
-      {/* Title */}
-      <div>
-        <h1 className="text-3xl font-black text-[#032b41] mb-1.5">For You</h1>
-        <p className="text-sm font-medium text-gray-500">
+    <div className="container">
+      <div className="row">
+        {/* Title */}
+        <div className="for-you__title">For You</div>
+        <div className="for-you__sub--title" style={{ marginBottom: "24px" }}>
           Check out the daily selection and recommendations tailored for you.
-        </p>
-      </div>
+        </div>
 
-      {/* Selected Book (Daily Item) */}
-      <section>
-        <h2 className="text-xl font-bold text-[#032b41] mb-4">Daily Assortment</h2>
+        {/* Selected Book (Daily Item) */}
+        <div className="for-you__title" style={{ fontSize: "18px", marginBottom: "16px" }}>
+          Daily Assortment
+        </div>
         {loadingSelected ? (
           <SelectedBookSkeleton />
         ) : selectedBook ? (
-          <Link
-            href={`/book/${selectedBook.id}`}
-            className="flex flex-col md:flex-row gap-6 bg-[#fb9b50] text-[#032b41] rounded-2xl p-6 hover:shadow-lg transition-shadow cursor-pointer border border-[#fb9b50]/20"
-          >
-            {/* Cover */}
-            <div className="relative w-[140px] h-[210px] md:w-[160px] md:h-[240px] shrink-0 mx-auto md:mx-0 shadow-lg rounded-lg overflow-hidden bg-gray-50">
-              <Image
-                src={selectedBook.imageLink}
-                alt={selectedBook.title}
-                fill
-                sizes="(max-width: 768px) 140px, 160px"
-                className="object-cover"
-                priority
-              />
-            </div>
-
-            {/* Details */}
-            <div className="flex-1 flex flex-col justify-center text-center md:text-left gap-3">
-              <h3 className="text-xl md:text-2xl font-black text-[#032b41] leading-tight">
-                {selectedBook.title}
-              </h3>
-              <p className="text-sm font-bold text-gray-800">{selectedBook.author}</p>
-              <p className="text-sm font-light text-gray-900 leading-relaxed max-w-[500px]">
+          <div className="selected__book">
+            <Link href={`/book/${selectedBook.id}`} className="selected__book--content">
+              <figure className="selected__img--mask">
+                <img
+                  src={selectedBook.imageLink}
+                  alt={selectedBook.title}
+                  className="selected__img"
+                />
+              </figure>
+              <div className="selected__book--text">
+                <div className="selected__book--title">{selectedBook.title}</div>
+                <div className="selected__book--author">{selectedBook.author}</div>
+                <div className="selected__book--duration-wrapper">
+                  <div className="selected__book--icon">
+                    <AiOutlinePlayCircle style={{ color: "#fff" }} />
+                  </div>
+                  <div className="selected__book--duration">15 min</div>
+                </div>
+              </div>
+            </Link>
+            <div className="selected__book--line"></div>
+            <div className="selected__book--sub-title">
+              <div className="selected__book--title" style={{ fontSize: "16px", fontWeight: "600" }}>
                 {selectedBook.subTitle}
-              </p>
-
-              {/* Action Button */}
-              <div className="mt-3 flex items-center justify-center md:justify-start gap-2 text-sm font-bold text-[#032b41] bg-white w-fit px-5 py-3 rounded-xl hover:bg-gray-50 transition-colors select-none shadow-xs">
-                <AiOutlinePlayCircle size={22} className="text-[#3ac27c]" />
-                <span>Listen now</span>
+              </div>
+              <div className="selected__book--author" style={{ fontSize: "14px", fontWeight: "300" }}>
+                {selectedBook.author}
               </div>
             </div>
-          </Link>
-        ) : (
-          <div className="p-10 text-center bg-gray-50 border border-dashed border-gray-200 rounded-2xl text-gray-500">
-            No selected book available today.
-          </div>
-        )}
-      </section>
-
-      {/* Recommended Section */}
-      <section>
-        <h2 className="text-xl font-bold text-[#032b41] mb-4">Recommended for you</h2>
-        <p className="text-xs font-semibold text-gray-500 mb-6">
-          We think you&apos;ll enjoy these based on your reading preferences.
-        </p>
-
-        {loadingRecommended ? (
-          <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-none">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <CardSkeleton key={i} />
-            ))}
-          </div>
-        ) : recommendedBooks.length > 0 ? (
-          <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
-            {recommendedBooks.map((book) => (
-              <BookCard key={book.id} book={book} />
-            ))}
           </div>
         ) : (
-          <div className="p-10 text-center bg-gray-50 border border-dashed border-gray-200 rounded-2xl text-gray-500">
-            No recommendations available right now.
+          <div className="finished__books--block-wrapper">
+            <div className="finished__books--title">No selected book available today.</div>
           </div>
         )}
-      </section>
 
-      {/* Suggested Section */}
-      <section>
-        <h2 className="text-xl font-bold text-[#032b41] mb-4">Suggested Books</h2>
-        <p className="text-xs font-semibold text-gray-500 mb-6">
-          Trending and top-rated books on Summarist.
-        </p>
+        {/* Recommended Section */}
+        <div className="for-you__recommended--books-wrapper" style={{ marginTop: "40px" }}>
+          <div className="for-you__title">Recommended for you</div>
+          <div className="for-you__sub--title" style={{ marginBottom: "24px" }}>
+            We think you&apos;ll enjoy these based on your reading preferences.
+          </div>
 
-        {loadingSuggested ? (
-          <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-none">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <CardSkeleton key={i} />
-            ))}
+          {loadingRecommended ? (
+            <div className="recommended__books--skeleton-wrapper">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <CardSkeleton key={i} />
+              ))}
+            </div>
+          ) : recommendedBooks.length > 0 ? (
+            <div className="for-you__recommended--books">
+              {recommendedBooks.map((book) => (
+                <BookCard key={book.id} book={book} />
+              ))}
+            </div>
+          ) : (
+            <div className="finished__books--block-wrapper">
+              <div className="finished__books--title">No recommendations available right now.</div>
+            </div>
+          )}
+        </div>
+
+        {/* Suggested Section */}
+        <div className="for-you__recommended--books-wrapper" style={{ marginTop: "40px", marginBottom: "40px" }}>
+          <div className="for-you__title">Suggested Books</div>
+          <div className="for-you__sub--title" style={{ marginBottom: "24px" }}>
+            Trending and top-rated books on Summarist.
           </div>
-        ) : suggestedBooks.length > 0 ? (
-          <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
-            {suggestedBooks.map((book) => (
-              <BookCard key={book.id} book={book} />
-            ))}
-          </div>
-        ) : (
-          <div className="p-10 text-center bg-gray-50 border border-dashed border-gray-200 rounded-2xl text-gray-500">
-            No suggestions available right now.
-          </div>
-        )}
-      </section>
+
+          {loadingSuggested ? (
+            <div className="recommended__books--skeleton-wrapper">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <CardSkeleton key={i} />
+              ))}
+            </div>
+          ) : suggestedBooks.length > 0 ? (
+            <div className="for-you__recommended--books">
+              {suggestedBooks.map((book) => (
+                <BookCard key={book.id} book={book} />
+              ))}
+            </div>
+          ) : (
+            <div className="finished__books--block-wrapper">
+              <div className="finished__books--title">No suggestions available right now.</div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
